@@ -5,25 +5,39 @@ global xmax;
 global ymin;
 global ymax;
 
-xmin = 100;
-xmax = 150;
-ymin = 70;
-ymax = 120;
+%Left is ymin and top is xmin
+xmin = 90;
+xmax = 200;
+ymin = 40;
+ymax = 170;
+
+%% Load
 
 [VV,ss,dd] = dicomreadVolume(fullfile('./Skull_Tumor/Skull_Tumor/')); 
 fv = stlread('Crani.stl');
-VV = squeeze(VV);
-scanner_position = ss.PatientPositions;
 NSlides = 112;
-
+VV = squeeze(VV);
 %Begins from 112 not from 1
 %Work with two first in order to align
-tumor_begin_slice = NSlides-42;
+tumor_begin_slice = NSlides-40;
 tumor_end_slice = NSlides-24;
-
 %Color
 colormap 'Bone';
 tumor_slices = tumor_begin_slice:tumor_end_slice;
+
+%% Keep only Tumor 
+
+for k=1:size(VV,3)
+    for i=1:size(VV,1)
+        for j=1:size(VV,2)
+            if(isTumor(i,j) == 0)
+                VV(i,j,k)=0;
+            end
+        end
+    end
+end
+
+%% Move Tumor display
 
 xn = (-135:120)';
 yn = (-150:105)';
@@ -32,8 +46,9 @@ zn = (1:112)';
 contourslice(xn,yn,zn,VV,[],[],tumor_slices,2);
 hold on
 
-%Translate Skull
+%% Translate Skull
 T= transl(0,0,25);
+
 for i=1:size(fv.vertices,1)
     aux = [fv.vertices(i,:) 1]';
     P = T*aux;
@@ -44,3 +59,20 @@ printSkull;
 
 view(3);
 axis tight
+
+%%
+
+function ret=isTumor(i,j)
+
+    global xmin;
+    global xmax;
+    global ymin;
+    global ymax;
+
+    ret = 0;
+
+    if((i>xmin)&&(i<xmax)&&(j>ymin)&&(j<ymax))
+        ret = 1;
+    end
+   
+end

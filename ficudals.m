@@ -82,50 +82,43 @@ display_fic_3=[X_dicom2display(dicom_fic_3(1)),...
 
 %% Transforms
 %%
-% Resize
-fv.vertices = fv.vertices*0.1;
-display_fic_1 = display_fic_1*0.1;
-display_fic_2 = display_fic_2*0.1;
-display_fic_3 = display_fic_3*0.1;
-V = V*4;
+% % Resize
+% fv.vertices = fv.vertices*0.1;
+% display_fic_1 = display_fic_1*0.1;
+% display_fic_2 = display_fic_2*0.1;
+% display_fic_3 = display_fic_3*0.1;
+%V = V*4;
 
 %Rotate
-theta=pi/2;
-R=rotx(theta);
-fv.vertices = fv.vertices*R;
-display_fic_1 = display_fic_1*R;
-display_fic_2 = display_fic_2*R;
-display_fic_3 = display_fic_3*R;
+theta=-pi/2;
+Rx=rotx(theta);
+fv.vertices = fv.vertices*Rx;
+display_fic_1 = display_fic_1*Rx;
+display_fic_2 = display_fic_2*Rx;
+display_fic_3 = display_fic_3*Rx;
+
+theta=pi;
+Rz=rotz(theta);
+fv.vertices = fv.vertices*Rz;
+display_fic_1 = display_fic_1*Rz;
+display_fic_2 = display_fic_2*Rz;
+display_fic_3 = display_fic_3*Rz;
+
 
 % %Translate
-T= transl(0,-20,0);
-for i=1:size(V,1)
-    for j=1:size(V,2)
-            aux = [V(i,:) 1]';
-            P = T*aux;
-            V(i,:) = P(1:3);
-            V(i,:);
-    end
-end
+% T= transl(0,-20,0);
+% for i=1:size(V,1)
+%     for j=1:size(V,2)
+%             aux = [V(i,:) 1]';
+%             P = T*aux;
+%             V(i,:) = P(1:3);
+%             V(i,:);
+%     end
+% end
 
 
 %% Display
 %%
-
-hold on
-p = patch('faces',F,'vertices',V,'FaceColor',skin1,'EdgeColor',skin2);
-hold on
-
-patch(fv,'FaceColor',       [0.8 0.8 1.0], ...
-         'EdgeColor',       'none',        ...
-         'FaceLighting',    'gouraud',     ...
-         'AmbientStrength', 0.15);
-
-% Add a camera light, and tone down the specular highlighting
-camlight('headlight');
-material('shiny');
-alpha 0.2
-
 % Fix the axes scaling, and set a nice view angle
 axis('image');
 view([-135 35]);
@@ -135,8 +128,8 @@ hold on
 plot3(display_fic_2(1),display_fic_2(2),display_fic_2(3),'.');
 hold on
 plot3(display_fic_3(1),display_fic_3(2),display_fic_3(3),'.');
-
-
+hold on;
+printSkull;
 
 
 %% 
