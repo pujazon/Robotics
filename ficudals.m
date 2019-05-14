@@ -16,8 +16,6 @@ global dic_neg_depth;
 global dic_pos_height;
 global dic_neg_height;
 
-skin1 = 'r';
-skin2 = [0.9290 0.6940 0.1250];
 skull_color_2=[0 0 0.7];
 skull_color_1=[1 1 1];
 skul_height=3;

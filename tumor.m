@@ -6,10 +6,10 @@ global ymin;
 global ymax;
 
 %Left is ymin and top is xmin
-xmin = 80;
+xmin = 70;
 xmax = 120;
-ymin = 100;
-ymax = 160;
+ymin = 105;
+ymax = 155;
 
 %% Load
 
@@ -20,7 +20,7 @@ VV = squeeze(VV);
 %Begins from 112 not from 1
 %Work with two first in order to align
 tumor_begin_slice = NSlides-40;
-tumor_end_slice = NSlides-10;
+tumor_end_slice = NSlides-20;
 %Color
 colormap 'Bone';
 tumor_slices = tumor_begin_slice:tumor_end_slice;
