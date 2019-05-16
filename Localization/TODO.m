@@ -7,6 +7,10 @@ load('Work_Space_Localization_Short_project.mat');
 x = inputdlg('Enter step time to visualize','Input', [1 20]);
 index = str2num(x{:});
 
+x_w = 0;
+y_w = 0;
+suma_theta = 0;
+
 %Robot is a triangle
 Robot= [0 -0.2 0 1;0.4 0 0 1;0 0.2 0 1]';
 
@@ -16,7 +20,7 @@ newP = zeros(523,3);
 %Initial position
 L  = data_enc(:,[1,6]);
 R  = data_enc(:,[1,7]);
-th = traj(:,3);
+th = trajec(:,3);
 
 for index=1:522 
     t = 0: 2*pi/359 : 2*pi;
@@ -33,10 +37,20 @@ for index=1:522
         circle (LandMark(i,:)',0.15)
     end
     
-    %Calculate new pose with poseintegration
-    p = (L,R,
-    PosIntegration(,R,width,error)
+    %Calculate new pose with poseintegration%%%%%%
 
+    delta_th= (R(index,2)-L(index,2))/(2*width);
+    delta_d = (R(index,2)+L(index,2))/2;
+
+    x_w = x_w + (delta_d*cos(suma_theta));
+    y_w = y_w + (delta_d*sin(suma_theta));
+    suma_theta=mod(suma_theta+delta_th,2*pi);
+    
+    trajec(index,1) = x_w;    
+    trajec(index,2) = y_w;
+    trajec(index,3) = suma_theta;
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % PreCalculated LanMarks seen by the Robot wrt wordl reference frame
     scatter(ldx(index,:), ldy(index,:)) 
@@ -61,6 +75,8 @@ for index=1:522
     pause(0.1);
     clf
 end
+
+
 
 
 
